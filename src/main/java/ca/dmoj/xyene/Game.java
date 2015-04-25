@@ -8,6 +8,10 @@ import java.io.IOException;
 
 /**
  * Base Game frame class.
+ * <p>
+ * 2015-04-24
+ *
+ * @author Tudor (Xyene)
  */
 public class Game extends JFrame {
     /**

@@ -5,6 +5,10 @@ import java.awt.*;
 
 /**
  * Show the user a menu.
+ * <p>
+ * 2015-04-24
+ *
+ * @author Tudor (Xyene)
  */
 public class MenuPanel extends TiledPanel {
 

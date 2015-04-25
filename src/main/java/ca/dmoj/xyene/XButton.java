@@ -8,6 +8,10 @@ import java.awt.event.MouseEvent;
 /**
  * General use "button" emulated by a JLabel.
  * A JLabel is much easier to style than a button across all LookAndFeels.
+ * <p>
+ * 2015-04-24
+ *
+ * @author Tudor (Xyene)
  */
 class XButton extends JLabel {
     /**

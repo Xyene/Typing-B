@@ -5,7 +5,11 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 /**
- * Base class for all containers. Fills the background with Game#BACKGROUND_TILE/
+ * Base class for all containers. Fills the background with Game#BACKGROUND_TILE.
+ *
+ * 2015-04-24
+ *
+ * @author Tudor (Xyene)
  */
 public class TiledPanel extends JPanel {
     {

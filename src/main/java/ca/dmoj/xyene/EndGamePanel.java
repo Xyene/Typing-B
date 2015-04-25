@@ -6,11 +6,16 @@ import java.awt.image.BufferedImage;
 
 /**
  * Game end screen.
+ * <p>
+ * 2015-04-24
+ *
+ * @author Tudor (Xyene)
  */
 public class EndGamePanel extends TiledPanel {
     /**
      * Creates a new EndGamePanel view.
-     * @param game The parent game.
+     *
+     * @param game  The parent game.
      * @param score The score the player scored.
      */
     public EndGamePanel(Game game, int score) {

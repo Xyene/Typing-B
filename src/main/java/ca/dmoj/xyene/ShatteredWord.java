@@ -5,6 +5,10 @@ import java.awt.geom.AffineTransform;
 
 /**
  * Simulates physics on a group of letters.
+ * <p>
+ * 2015-04-24
+ *
+ * @author Tudor (Xyene)
  */
 public class ShatteredWord implements IRenderable {
     private Image[] renders;

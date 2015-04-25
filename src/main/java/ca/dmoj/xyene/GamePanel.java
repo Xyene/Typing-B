@@ -12,6 +12,13 @@ import java.util.List;
 
 import static ca.dmoj.xyene.Game.*;
 
+/**
+ * Game view.
+ *
+ * 2015-04-24
+ *
+ * @author Tudor (Xyene)
+ */
 public class GamePanel extends TiledPanel {
     private final Game game;
     private String targetWord;
@@ -45,6 +52,7 @@ public class GamePanel extends TiledPanel {
             public void actionPerformed(ActionEvent x) {
                 long diff = System.currentTimeMillis() - start;
                 start = System.currentTimeMillis();
+                // Ratio between target FPS and actual FPS, scaled down a bit
                 double v = diff / (1000.0 / GAME_UPS) * 0.8;
 
                 // Time is up!

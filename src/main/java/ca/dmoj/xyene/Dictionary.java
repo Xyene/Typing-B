@@ -11,6 +11,10 @@ import java.util.List;
 
 /**
  * Dictionary container class.
+ *
+ * 2015-04-24
+ *
+ * @author Tudor (Xyene)
  */
 public class Dictionary {
     /**

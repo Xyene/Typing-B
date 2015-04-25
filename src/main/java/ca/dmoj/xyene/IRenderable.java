@@ -4,6 +4,10 @@ import java.awt.*;
 
 /**
  * Interface for all widgets that may be rendered.
+ * <p>
+ * 2015-04-24
+ *
+ * @author Tudor (Xyene)
  */
 public interface IRenderable {
     /**
