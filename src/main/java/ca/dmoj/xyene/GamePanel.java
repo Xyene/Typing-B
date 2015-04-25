@@ -167,7 +167,7 @@ public class GamePanel extends TiledPanel {
         int w = g.getFontMetrics().stringWidth(hud);
         g.drawString(hud, W / 2 - w / 2, H - (int) (WFONT.getSize() * 5));
         double acc = Math.max(0, correct / (double) (correct + wrong)) * 100;
-        g.drawString(String.format("%d %s", score, acc == Double.NaN ? "" : String.format("(%.1f%%)", acc)), WFONT.getSize() / 2, WFONT.getSize() + WFONT.getSize() / 2);
+        g.drawString(String.format("%d %s", score, Double.isNaN(acc) ? "" : String.format("(%.1f%%)", acc)), WFONT.getSize() / 2, WFONT.getSize() + WFONT.getSize() / 2);
 
         int minutes = (int) (timeLeft / 1000 / 60);
         int seconds = (int) ((timeLeft - minutes * 1000 * 60) / 1000);
