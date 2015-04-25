@@ -4,11 +4,17 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+/**
+ * Base class for all containers. Fills the background with Game#BACKGROUND_TILE/
+ */
 public class TiledPanel extends JPanel {
     {
-        setBackground(Game.BACKGROUND_COLOR);
+        setBackground(Game.BACKGROUND);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void paintComponent(Graphics _g) {
         super.paintComponent(_g);

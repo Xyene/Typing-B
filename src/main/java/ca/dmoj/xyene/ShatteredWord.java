@@ -97,6 +97,9 @@ public class ShatteredWord implements IRenderable {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isActive() {
         // Keep simulating as long as a fragment still exists on screen.
@@ -104,6 +107,9 @@ public class ShatteredWord implements IRenderable {
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void update(double v) {
         // Clean up invisible fragments
@@ -111,7 +117,9 @@ public class ShatteredWord implements IRenderable {
             FragVector frag = frags[i];
             if (frag == null) continue; // Already cleaned up
             // If they're outside the visible area, remove them
-            if (frag.x > Game.W || frag.x < 0 || frag.y < -renders[i].getHeight(null) || frag.y > Game.H) {
+            int w = renders[i].getWidth(null);
+            int h = renders[i].getHeight(null);
+            if (frag.x > Game.W + w || frag.x < -w || frag.y < -h || frag.y > Game.H + h) {
                 frags[i] = null;
                 renders[i] = null;
             }
@@ -125,12 +133,15 @@ public class ShatteredWord implements IRenderable {
             // y = Vy * t + 0.5*a*t*t
             // For projectiles, a = g = 9.8
             // However, here I use g = 0 so that words evenly disperse across the screen
-            frag.y = frag._y + frag.dy * frag.t;
+            frag.y = frag._y + frag.dy * frag.t; // + 0.5 * 5 * frag.t * frag.t;
             // Rotate the fragment
             frag.rot += v;
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void draw(Graphics2D g) {
         // We need to set interpolation to bilinear, because nearest-neighbour produces terrible aliasing

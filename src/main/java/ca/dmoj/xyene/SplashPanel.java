@@ -11,16 +11,18 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
+/**
+ * Nice little splash panel.
+ */
 public class SplashPanel extends TiledPanel {
     private final Game game;
     private KeyAdapter keys;
 
-    @Override
-    public void removeNotify() {
-        super.removeNotify();
-        game.removeKeyListener(keys);
-    }
-
+    /**
+     * Creates a SplashPanel view.
+     *
+     * @param game The parent game.
+     */
     public SplashPanel(Game game) {
         this.game = game;
         setLayout(new BorderLayout());
@@ -44,6 +46,9 @@ public class SplashPanel extends TiledPanel {
             @Override
             public void paintComponent(Graphics _g) {
                 Graphics2D g = (Graphics2D) _g;
+                // Enable bicubic interpolation for the title
+                // its /extremely/ slow, but we're not actively rendering so we can use all our resources
+                // on making the title look as nice as we can
                 g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
                 AffineTransform at = new AffineTransform();
                 int x = getWidth() / 5;
@@ -59,18 +64,20 @@ public class SplashPanel extends TiledPanel {
         }, BorderLayout.CENTER);
 
         Runnable start = () -> {
-            // Give the impression of very fancy loading even though its fake
             new Thread(() -> {
                 SwingUtilities.invokeLater(() -> {
                     // Here we highlight the background
-                    setBackground(Game.TAB_HIGHLIGHT_BORDER);
-                    // and immediately paint
+                    setBackground(Game.HIGHLIGHT_ORANGE);
+                    // and immediately paint, without scheduling on the EDT (we're already on the EDT)
                     paintImmediately(getBounds());
                 });
+                // Give the impression of very fancy loading even though there's nothing to load
+                // ;-)
                 try {
                     Thread.sleep(400);
                 } catch (InterruptedException ignored) {
                 }
+                // Read the dictionary file. Sure, we already waited 400ms, but the dictionary read is almost instant.
                 Dictionary.init();
                 SwingUtilities.invokeLater(() -> {
                     // This next part will take a long time, and our frame won't be repainted during this time
@@ -91,5 +98,15 @@ public class SplashPanel extends TiledPanel {
                 start.run();
             }
         });
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void removeNotify() {
+        super.removeNotify();
+        // Make sure we stop listening after this view is destroyed.
+        game.removeKeyListener(keys);
     }
 }

@@ -19,10 +19,22 @@ public class GamePanel extends TiledPanel {
     private Timer ticker;
     private List<IRenderable> renders = new ArrayList<>();
     private String currentWord = "";
-    private int score = 0;
+    private int correct = 0, wrong = 0, score = 0;
     private long timeLeft = 60 * 2 * 1000;
     private KeyAdapter keys;
 
+    /**
+     * Creates a new GamePanel view.
+     *
+     * @param game The parent game.
+     */
+    public GamePanel(Game game) {
+        this.game = game;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void addNotify() {
         super.addNotify();
@@ -35,7 +47,9 @@ public class GamePanel extends TiledPanel {
                 start = System.currentTimeMillis();
                 double v = diff / (1000.0 / GAME_UPS) * 0.8;
 
+                // Time is up!
                 if (timeLeft <= 0) {
+                    // and the game is over
                     game.setContent(new EndGamePanel(game, score));
                     return;
                 }
@@ -68,7 +82,14 @@ public class GamePanel extends TiledPanel {
                     currentWord = "";
                     boolean missed = !a.equals(b);
 
-                    score = Math.max(0, score + (missed ? -2 : 1));
+                    if (missed) {
+                        score -= 2;
+                        score = Math.max(0, score);
+                        wrong++;
+                    } else {
+                        score++;
+                        correct++;
+                    }
 
                     renders.add(new ShatteredWord(
                             getWidth() / 2 - wordRender.getWidth() / 2,
@@ -82,6 +103,9 @@ public class GamePanel extends TiledPanel {
         });
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void removeNotify() {
         super.removeNotify();
@@ -89,15 +113,15 @@ public class GamePanel extends TiledPanel {
         game.removeKeyListener(keys);
     }
 
-    public GamePanel(Game game) {
-        this.game = game;
-    }
-
+    /**
+     * Resets the current word, animating the next word drop.
+     */
     private void reset() {
         targetWord = null;
         String targetWord = Dictionary.getRandomWord();
         wordRender = Images.renderImage(targetWord, Color.WHITE, WFONT.deriveFont(25f));
         int x = getWidth() / 2 - wordRender.getWidth() / 2, y = getHeight() / 2 - wordRender.getHeight();
+        // Drops down a word
         renders.add(new IRenderable() {
             private double _x = x, _y = -50;
 
@@ -122,23 +146,28 @@ public class GamePanel extends TiledPanel {
         });
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void paintComponent(Graphics _g) {
         super.paintComponent(_g);
         Graphics2D g = (Graphics2D) _g;
 
+        // Draw all the widgets!
         for (IRenderable r : renders) r.draw(g);
         if (targetWord != null) {
             int x = getWidth() / 2 - wordRender.getWidth() / 2, y = getHeight() / 2 - wordRender.getHeight();
             g.drawImage(wordRender, x, y, null);
         }
         g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-        g.setColor(Game.TAB_HIGHLIGHT_BORDER);
+        g.setColor(Game.HIGHLIGHT_ORANGE);
         String hud = "[ " + currentWord + " ]";
         g.setFont(WFONT.deriveFont(18f).deriveFont(Font.BOLD));
         int w = g.getFontMetrics().stringWidth(hud);
         g.drawString(hud, W / 2 - w / 2, H - (int) (WFONT.getSize() * 5));
-        g.drawString(score + "", WFONT.getSize() / 2, WFONT.getSize() + WFONT.getSize() / 2);
+        double acc = Math.max(0, correct / (double) (correct + wrong)) * 100;
+        g.drawString(String.format("%d %s", score, acc == Double.NaN ? "" : String.format("(%.1f%%)", acc)), WFONT.getSize() / 2, WFONT.getSize() + WFONT.getSize() / 2);
 
         int minutes = (int) (timeLeft / 1000 / 60);
         int seconds = (int) ((timeLeft - minutes * 1000 * 60) / 1000);
