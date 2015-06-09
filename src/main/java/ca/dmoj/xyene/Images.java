@@ -49,8 +49,6 @@ public class Images {
         g.setColor(new Color(0, 0, 0, alpha));
         g.fillRect(0, 0, pre.getWidth() + 20, pre.getHeight() + 20);
 
-        // Release the Graphics instance
-        g.dispose();
         return buf;
     }
 
@@ -98,11 +96,7 @@ public class Images {
 
                 _Key key = (_Key) o;
 
-                if (!color.equals(key.color)) return false;
-                if (!word.equals(key.word)) return false;
-                if (!font.equals(key.font)) return false;
-
-                return true;
+                return color.equals(key.color) && word.equals(key.word) && font.equals(key.font);
             }
 
             @Override
